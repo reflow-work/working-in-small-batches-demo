@@ -1,12 +1,7 @@
 import { Elysia } from 'elysia';
 import { html } from '@elysiajs/html';
 import * as elements from 'typed-html';
-
-type Todo = {
-  id: number;
-  content: string;
-  completed: boolean;
-};
+import { Todo } from './domain/todos/todo';
 
 const app = new Elysia()
   .use(html())
