@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import { html } from '@elysiajs/html';
 import * as elements from 'typed-html';
+import { TodoList } from './components/todo.component';
 import { listTodos } from './domain/todos/todo.service';
 import { Todo } from './domain/todos/todo';
 
@@ -18,13 +19,7 @@ const app = new Elysia()
   .get('/todos', async () => {
     const todos: Todo[] = await listTodos();
 
-    return (
-      <div>
-        {todos.map((todo: Todo) => (
-          <p>{todo.content}</p>
-        ))}
-      </div>
-    );
+    return <TodoList todos={todos} />;
   })
   .listen(3000);
 
