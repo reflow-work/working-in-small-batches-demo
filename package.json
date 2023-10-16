@@ -3,14 +3,17 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "drizzle-kit": "^0.19.13"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
     "@elysiajs/html": "^0.7.3",
+    "drizzle-orm": "^0.28.6",
     "elysia": "^0.7.17",
+    "postgres": "^3.4.0",
     "typed-html": "^3.0.1"
   }
 }
