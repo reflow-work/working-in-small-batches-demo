@@ -1,6 +1,7 @@
 import { Elysia } from 'elysia';
 import { html } from '@elysiajs/html';
 import * as elements from 'typed-html';
+import { listTodos } from './domain/todos/todo.service';
 import { Todo } from './domain/todos/todo';
 
 const app = new Elysia()
@@ -14,12 +15,8 @@ const app = new Elysia()
       </BaseHtml>
     )
   )
-  .get('/todos', () => {
-    const todos: Todo[] = [
-      { id: 1, content: 'Buy milk', completed: true },
-      { id: 2, content: 'Buy eggs', completed: false },
-      { id: 3, content: 'Buy bread', completed: false },
-    ];
+  .get('/todos', async () => {
+    const todos: Todo[] = await listTodos();
 
     return (
       <div>
