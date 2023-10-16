@@ -1,7 +1,11 @@
-export function listTodos() {
-  return Promise.resolve([
-    { id: 1, content: 'Buy milk', completed: true },
-    { id: 2, content: 'Buy eggs', completed: false },
-    { id: 3, content: 'Buy bread', completed: false },
-  ])
+import { db } from "../../db";
+import { TodoRecord, todosTable } from "../../db/schema";
+import { Todo } from "./todo";
+
+export async function listTodos(): Promise<Todo[]> {
+  const result = await db.select().from(todosTable);
+
+  return result.map(
+    ({ id, content, completed }: TodoRecord) => ({ id, content, completed })
+  )
 }
