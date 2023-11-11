@@ -2,10 +2,10 @@ import { eq } from 'drizzle-orm';
 import { db } from '../../db';
 import { TodoRecord, todosTable } from '../../db/schema';
 import { Todo } from './todo';
-import * as SlackService from '../notification/slack.service';
-import * as SlackBlock from '../notification/slack-block';
-import * as GoogleChatService from '../notification/google-chat.service';
-import * as GoogleChatSection from '../notification/google-chat-section';
+import * as SlackService from '../notifications/slack.service';
+import * as SlackBlock from '../notifications/slack-block';
+import * as GoogleChatService from '../notifications/google-chat.service';
+import * as GoogleChatSection from '../notifications/google-chat-section';
 
 export async function listTodos(): Promise<Todo[]> {
   const result = await db.select().from(todosTable).orderBy(todosTable.id);
