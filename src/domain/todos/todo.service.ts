@@ -18,6 +18,19 @@ async function getTodo(id: number): Promise<Todo> {
   return toTodo(result);
 }
 
+export async function createTodo({
+  content,
+}: {
+  content: string;
+}): Promise<Todo> {
+  const [result] = await db
+    .insert(todosTable)
+    .values({ content, completed: false })
+    .returning();
+
+  return toTodo(result);
+}
+
 export async function toggleTodo(id: number): Promise<Todo> {
   const todo = await getTodo(id);
 
