@@ -8,6 +8,13 @@
       "when": 1697425325447,
       "tag": "0000_amazing_mojo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1699710738771,
+      "tag": "0001_furry_jane_foster",
+      "breakpoints": true
     }
   ]
 }
