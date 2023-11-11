@@ -9,13 +9,15 @@ import {
   toggleTodo,
 } from './domain/todos/todo.service';
 import { Todo } from './domain/todos/todo';
+import { listIntegrations } from './domain/integrations/integration.service';
 
 const app = new Elysia()
   .use(html())
   .get('/', () => (
     <BaseHtml>
-      <div class="flex w-full h-screen justify-center items-center">
+      <div class="flex flex-col w-full h-screen justify-center items-center space-y-4">
         <div hx-get="/todos" hx-trigger="load" hx-swap="innerHTML"></div>
+        <div hx-get="/integrations" hx-trigger="load" hx-swap="innerHTML"></div>
       </div>
     </BaseHtml>
   ))
@@ -61,6 +63,18 @@ const app = new Elysia()
       }),
     }
   )
+  .get('/integrations', async () => {
+    const integrations = await listIntegrations();
+
+    return (
+      <div>
+        <h2 class="text-xl font-bold">Integrations</h2>
+        {integrations.map((integration) => (
+          <div>{integration.provider}</div>
+        ))}
+      </div>
+    );
+  })
   .listen(3000);
 
 console.log(

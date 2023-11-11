@@ -27,6 +27,7 @@ export function TodoItem({ id, content, completed }: Todo) {
 export function TodoList({ todos }: { todos: Todo[] }) {
   return (
     <div>
+      <h2 class="text-xl font-bold">Todos</h2>
       {todos.map((todo: Todo) => (
         <TodoItem {...todo} />
       ))}
