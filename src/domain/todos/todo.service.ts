@@ -4,6 +4,8 @@ import { TodoRecord, todosTable } from '../../db/schema';
 import { Todo } from './todo';
 import * as SlackService from '../notification/slack.service';
 import * as SlackBlock from '../notification/slack-block';
+import * as GoogleChatService from '../notification/google-chat.service';
+import * as GoogleChatSection from '../notification/google-chat-section';
 
 export async function listTodos(): Promise<Todo[]> {
   const result = await db.select().from(todosTable).orderBy(todosTable.id);
@@ -36,6 +38,20 @@ export async function createTodo({
     SlackService.postMessage(
       [SlackBlock.text_section(`Created todo: ${todo.content}`)],
       token
+    );
+  });
+
+  GoogleChatService.getAccessToken().then(({ accessToken: accessToken }) => {
+    GoogleChatService.createMessage(
+      {
+        cardId: 'cardId',
+        card: {
+          sections: [
+            GoogleChatSection.textWidget(`Created todo: ${todo.content}`),
+          ],
+        },
+      },
+      accessToken
     );
   });
 
