@@ -1,11 +1,17 @@
 import { Todo } from '../domain/todos/todo';
 import * as elements from 'typed-html';
 
-function TodoItem({ content, completed }: Todo) {
+export function TodoItem({ id, content, completed }: Todo) {
   return (
     <div class="flex flex-row space-x-3">
       <p>{content}</p>
-      <input type="checkbox" checked={completed} />
+      <input
+        type="checkbox"
+        checked={completed}
+        hx-post={`/todos/toggle/${id}`}
+        hx-target={'closest div'}
+        hx-swap="outerHTML"
+      />
       <button class="text-red-500">X</button>
     </div>
   );

@@ -1,8 +1,8 @@
-import { Elysia } from 'elysia';
+import { Elysia, t } from 'elysia';
 import { html } from '@elysiajs/html';
 import * as elements from 'typed-html';
-import { TodoList } from './components/todo.component';
-import { listTodos } from './domain/todos/todo.service';
+import { TodoItem, TodoList } from './components/todo.component';
+import { listTodos, toggleTodo } from './domain/todos/todo.service';
 import { Todo } from './domain/todos/todo';
 
 const app = new Elysia()
@@ -21,6 +21,19 @@ const app = new Elysia()
 
     return <TodoList todos={todos} />;
   })
+  .post(
+    '/todos/toggle/:id',
+    async ({ params }) => {
+      const todo: Todo = await toggleTodo(params.id);
+
+      return <TodoItem {...todo} />;
+    },
+    {
+      params: t.Object({
+        id: t.Numeric(),
+      }),
+    }
+  )
   .listen(3000);
 
 console.log(
