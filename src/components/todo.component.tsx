@@ -12,7 +12,14 @@ export function TodoItem({ id, content, completed }: Todo) {
         hx-target={'closest div'}
         hx-swap="outerHTML"
       />
-      <button class="text-red-500">X</button>
+      <button
+        class="text-red-500"
+        hx-delete={`/todos/${id}`}
+        hx-target={'closest div'}
+        hx-swap="outerHTML"
+      >
+        X
+      </button>
     </div>
   );
 }

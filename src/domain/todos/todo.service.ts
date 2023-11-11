@@ -34,6 +34,10 @@ export async function toggleTodo(id: number): Promise<Todo> {
   return updatedTodo;
 }
 
+export async function deleteTodo(id: number): Promise<void> {
+  await db.delete(todosTable).where(eq(todosTable.id, id));
+}
+
 function toTodo({ id, content, completed }: TodoRecord) {
   return {
     id,

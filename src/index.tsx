@@ -2,7 +2,7 @@ import { Elysia, t } from 'elysia';
 import { html } from '@elysiajs/html';
 import * as elements from 'typed-html';
 import { TodoItem, TodoList } from './components/todo.component';
-import { listTodos, toggleTodo } from './domain/todos/todo.service';
+import { deleteTodo, listTodos, toggleTodo } from './domain/todos/todo.service';
 import { Todo } from './domain/todos/todo';
 
 const app = new Elysia()
@@ -25,6 +25,17 @@ const app = new Elysia()
       const todo: Todo = await toggleTodo(params.id);
 
       return <TodoItem {...todo} />;
+    },
+    {
+      params: t.Object({
+        id: t.Numeric(),
+      }),
+    }
+  )
+  .delete(
+    '/todos/:id',
+    async ({ params }) => {
+      await deleteTodo(params.id);
     },
     {
       params: t.Object({
