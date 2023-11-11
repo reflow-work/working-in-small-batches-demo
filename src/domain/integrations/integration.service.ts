@@ -1,31 +1,23 @@
 import { db } from '../../db';
-import {
-  googleChatCredentialsTable,
-  slackCredentialsTable,
-} from '../../db/schema';
+import { integrationsTable } from '../../db/schema';
+
+enum IntegrationProvider {
+  SLACK = 'slack',
+  GOOGLE_CHAT = 'google_chat',
+}
 
 type Integration = {
-  provider: string;
+  id: number;
+  provider: IntegrationProvider;
 };
 
 export async function listIntegrations(): Promise<Integration[]> {
-  const slackResultsPromise = db.select().from(slackCredentialsTable);
-  const googleChatResultsPromise = db.select().from(googleChatCredentialsTable);
+  const result = await db.select().from(integrationsTable);
 
-  return await Promise.all([
-    slackResultsPromise,
-    googleChatResultsPromise,
-  ]).then(([slackResults, googleChatResults]) => {
-    const integrations: Integration[] = [];
-
-    if (slackResults.length == 1) {
-      integrations.push({ provider: 'slack' });
-    }
-
-    if (googleChatResults.length == 1) {
-      integrations.push({ provider: 'googleChat' });
-    }
-
-    return integrations;
+  return result.map((integration) => {
+    return {
+      id: integration.id,
+      provider: integration.provider as IntegrationProvider,
+    };
   });
 }

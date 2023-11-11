@@ -4,6 +4,7 @@ import {
   varchar,
   boolean,
   timestamp,
+  jsonb,
 } from 'drizzle-orm/pg-core';
 import { InferSelectModel } from 'drizzle-orm';
 import { time } from 'drizzle-orm/mysql-core';
@@ -26,6 +27,12 @@ export const googleChatCredentialsTable = pgTable('google_chat_credentials', {
   expiryDate: timestamp('expiry_date').notNull(),
 });
 
+export const integrationsTable = pgTable('integrations', {
+  id: serial('id').primaryKey(),
+  provider: varchar('provider', { length: 256 }).notNull(),
+  credentials: jsonb('credentials').notNull(),
+});
+
 export type TodoRecord = InferSelectModel<typeof todosTable>;
 export type SlackCredentialRecord = InferSelectModel<
   typeof slackCredentialsTable
@@ -33,3 +40,4 @@ export type SlackCredentialRecord = InferSelectModel<
 export type GoogleChatCredentialRecord = InferSelectModel<
   typeof googleChatCredentialsTable
 >;
+export type IntegrationRecord = InferSelectModel<typeof integrationsTable>;
