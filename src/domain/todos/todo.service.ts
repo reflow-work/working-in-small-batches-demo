@@ -4,7 +4,7 @@ import { TodoRecord, todosTable } from '../../db/schema';
 import { Todo } from './todo';
 
 export async function listTodos(): Promise<Todo[]> {
-  const result = await db.select().from(todosTable);
+  const result = await db.select().from(todosTable).orderBy(todosTable.id);
 
   return result.map(toTodo);
 }
