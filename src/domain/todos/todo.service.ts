@@ -2,10 +2,9 @@ import { eq } from 'drizzle-orm';
 import { db } from '../../db';
 import { TodoRecord, todosTable } from '../../db/schema';
 import { Todo } from './todo';
-import * as SlackService from '../notifications/slack.service';
-import * as SlackBlock from '../notifications/slack-block';
-import * as GoogleChatService from '../notifications/google-chat.service';
-import * as GoogleChatSection from '../notifications/google-chat-section';
+import { listIntegrations } from '../integrations/integration.service';
+import { link, text } from '../notifications/block';
+import { notify } from '../notifications/notification.service';
 
 export async function listTodos(): Promise<Todo[]> {
   const result = await db.select().from(todosTable).orderBy(todosTable.id);
@@ -34,25 +33,15 @@ export async function createTodo({
 
   const todo = toTodo(result);
 
-  SlackService.getAccessToken().then(({ token: token }) => {
-    SlackService.postMessage(
-      [SlackBlock.text_section(`Created todo: ${todo.content}`)],
-      token
-    );
-  });
+  const blocks = [
+    text(`Created todo: ${todo.content}`),
+    link(`Open in browser`, 'https://https://www.recatch.cc/'),
+  ];
 
-  GoogleChatService.getAccessToken().then(({ accessToken: accessToken }) => {
-    GoogleChatService.createMessage(
-      {
-        cardId: 'cardId',
-        card: {
-          sections: [
-            GoogleChatSection.textWidget(`Created todo: ${todo.content}`),
-          ],
-        },
-      },
-      accessToken
-    );
+  listIntegrations().then((integrations) => {
+    integrations.map((integration) => {
+      notify(integration.provider, blocks, integration.credentials);
+    });
   });
 
   return todo;

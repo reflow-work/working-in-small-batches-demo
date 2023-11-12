@@ -1,36 +1,13 @@
-import { db } from '../../db';
-import { googleChatCredentialsTable } from '../../db/schema';
+import { GoogleChatCredentials } from '../integrations/integration.service';
+import { toGoogleChatCard } from './google-chat-section';
+import { NotificationService } from './notification.service';
 
-type GoogleChatCredential = {
-  id: number;
-  accessToken: string;
-  refreshToken: string;
-  expiryDate: Date;
+export const googleChatService: NotificationService = {
+  notify: async (blocks: any[], credentials: GoogleChatCredentials) => {
+    const googleChatCard = toGoogleChatCard('Notify', blocks);
+
+    console.log('google-chat - notify', googleChatCard, credentials);
+
+    return Promise.resolve();
+  },
 };
-
-type GoogleChatCard = {
-  cardId: string;
-  card: {
-    sections: any[];
-  };
-};
-
-export async function getAccessToken(): Promise<GoogleChatCredential> {
-  const [result] = await db.select().from(googleChatCredentialsTable);
-
-  return Promise.resolve({
-    id: result.id,
-    accessToken: result.accessToken,
-    refreshToken: result.refreshToken,
-    expiryDate: result.expiryDate,
-  });
-}
-
-export async function createMessage(
-  card: GoogleChatCard,
-  accessToken: string
-): Promise<void> {
-  console.log('google-chat - createMessage', accessToken);
-
-  return Promise.resolve();
-}

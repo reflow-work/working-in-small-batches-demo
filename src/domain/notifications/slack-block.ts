@@ -1,4 +1,17 @@
-export function text_section(text: string) {
+export function toSlackBlocks(blocks: any[]): any[] {
+  return blocks.map((block) => {
+    switch (block.type) {
+      case 'text':
+        return text_section(block.text);
+      case 'link':
+        return link_section(block.text, block.url);
+      case 'divider':
+        return divider();
+    }
+  });
+}
+
+function text_section(text: string) {
   return {
     type: 'section',
     text: {
@@ -8,7 +21,7 @@ export function text_section(text: string) {
   };
 }
 
-export function link_section(text: string, url: string) {
+function link_section(text: string, url: string) {
   return {
     type: 'section',
     text: {
@@ -18,7 +31,7 @@ export function link_section(text: string, url: string) {
   };
 }
 
-export function divider() {
+function divider() {
   return {
     type: 'divider',
   };

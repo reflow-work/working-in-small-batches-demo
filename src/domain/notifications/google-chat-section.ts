@@ -1,11 +1,35 @@
-export function textWidget(text: string) {
+type GoogleChatCard = {
+  cardId: string;
+  card: {
+    sections: any[];
+  };
+};
+
+export function toGoogleChatCard(
+  cardId: string,
+  blocks: any[]
+): GoogleChatCard {
+  const sections = blocks
+    .map((block) => {
+      switch (block.type) {
+        case 'text':
+          return textWidget(block.text);
+        case 'link':
+          return textWidget(block.text);
+        case 'divider':
+          return null;
+      }
+    })
+    .filter((value) => value != null);
+
   return {
-    textParagraph: { text },
+    cardId: cardId,
+    card: { sections },
   };
 }
 
-export function imageWidget(imageUrl: string) {
+function textWidget(text: string) {
   return {
-    image: { imageUrl },
+    textParagraph: { text },
   };
 }

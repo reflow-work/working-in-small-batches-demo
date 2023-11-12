@@ -1,22 +1,13 @@
-import { db } from '../../db';
-import { slackCredentialsTable } from '../../db/schema';
+import { SlackCredentials } from '../integrations/integration.service';
+import { NotificationService } from './notification.service';
+import { toSlackBlocks } from './slack-block';
 
-type SlackCredential = {
-  id: number;
-  token: string;
+export const slackService: NotificationService = {
+  notify: async (blocks: any[], credentials: SlackCredentials) => {
+    const slackBlocks = toSlackBlocks(blocks);
+
+    console.log('slack - notify', slackBlocks, credentials);
+
+    return Promise.resolve();
+  },
 };
-
-export async function getAccessToken(): Promise<SlackCredential> {
-  const [result] = await db.select().from(slackCredentialsTable);
-
-  return Promise.resolve({
-    id: result.id,
-    token: result.token,
-  });
-}
-
-export async function postMessage(blocks: any[], token: string): Promise<void> {
-  console.log('slack - postMessage', blocks, token);
-
-  return Promise.resolve();
-}
